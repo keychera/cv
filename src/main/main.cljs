@@ -1,5 +1,5 @@
 (ns main 
-  (:require [cv]
+  (:require [old-cv]
             [goog.dom :as gdom]
             [reagent.dom :as rdom]))
 
@@ -8,7 +8,7 @@
   (gdom/getElement "app"))
 
 (defn mount [el]
-  (rdom/render [cv/cv] el))
+  (rdom/render [old-cv/cv] el))
 
 (defn mount-app-element []
   (when-let [el (get-app-element)]

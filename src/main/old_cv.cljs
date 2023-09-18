@@ -1,4 +1,4 @@
-(ns cv)
+(ns old-cv)
 
 (def content
   {:name "Kevin Erdiza Yogatama"
