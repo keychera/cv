@@ -1,7 +1,9 @@
 (ns old-cv
-  (:require ["antd" :refer [Row, Col, Avatar, Typography, Card, Tag, Tabs]]))
+  (:require ["antd" :refer [Avatar Card Col Row Typography]]
+            [reagent.core :refer [as-element]]))
 
 (def Text Typography.Text)
+(def Meta Card.Meta)
 
 (def content
   {:name "Kevin Erdiza Yogatama"
@@ -55,10 +57,31 @@
 (defn ExperienceCard [{:keys [title place time desc]}]
   [:> Card {:size "small" :style {:fontSize 12}}
    [:div
-    [:> Text {:strong true} title] 
+    [:> Text {:strong true} title]
     "・" [:> Text {:type "secondary"} place]]
    [:div time]
    [:div desc]])
+
+(defn Profile [{:keys [content big-screen?]}]
+  [:> Card
+   {:actions (->> content :contact
+                  (mapv (fn [{:keys [name display link]}]
+                          (as-element
+                           [:> Text
+                            [:> Text {:strong true} name]
+                            (Link {:href link :children display})]))))
+    :cover (when-not big-screen?
+             (as-element
+              [:div {:style {:textAlign "center" :paddingTop 24}}
+               [:> Avatar {:src "" :size 128 :style {:display "inline-block"}}]]))}
+   (if big-screen?
+     [:> Meta
+      {:avatar (as-element [:> Avatar {:src "" :size 128}])
+       :title (:name content)
+       :description (:about content)}]
+     [:div
+      [:h4 (:name content)]
+      [:p {:style {:color "#00000073"}} (:about content)]])])
 
 (defn cv []
   [:div
@@ -68,6 +91,7 @@
      "I have " [:strong "bold"]
      [:span {:style {:color "red"}} " and red"]
      " text."])
+   (Profile {:content content :big-screen? false})
    (EducationCard (->> content :education first))
    (ExperienceCard (->> content :experience first))])
 
