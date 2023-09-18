@@ -1,6 +1,8 @@
 (ns old-cv
   (:require ["antd" :refer [Row, Col, Avatar, Typography, Card, Tag, Tabs]]))
 
+(def Text Typography.Text)
+
 (def content
   {:name "Kevin Erdiza Yogatama"
    :about "An aspiring individual that has several experiences in web, mobile, and game development using various tools and platform"
@@ -46,9 +48,17 @@
   [:> Card {:size "small" :style {:fontSize 12}}
    [:> Row
     [:> Col {:span 18}
-     [:div [:Text {:strong true} name]]
-     [:div [:Text {:strong true} type] "・" time]]
+     [:div [:> Text {:strong true} name]]
+     [:div [:> Text {:code true} type] "・" time]]
     [:> Col {:span 6} extra]]])
+
+(defn ExperienceCard [{:keys [title place time desc]}]
+  [:> Card {:size "small" :style {:fontSize 12}}
+   [:div
+    [:> Text {:strong true} title] 
+    "・" [:> Text {:type "secondary"} place]]
+   [:div time]
+   [:div desc]])
 
 (defn cv []
   [:div
@@ -58,5 +68,6 @@
      "I have " [:strong "bold"]
      [:span {:style {:color "red"}} " and red"]
      " text."])
-   (EducationCard (->> content :education first))])
+   (EducationCard (->> content :education first))
+   (ExperienceCard (->> content :experience first))])
 
