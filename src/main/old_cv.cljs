@@ -1,4 +1,5 @@
-(ns old-cv)
+(ns old-cv
+  (:require ["antd" :refer [Row, Col, Avatar, Typography, Card, Tag, Tabs]]))
 
 (def content
   {:name "Kevin Erdiza Yogatama"
@@ -41,6 +42,14 @@
   [:div {:style {:textAlign "center" :verticalAlign "center" :paddingTop 6 :backgroundColor "white"}}
    [:h4 {:style {:marginBottom 0 :paddingBottom 2}} children]])
 
+(defn EducationCard [{:keys [name type time extra]}]
+  [:> Card {:size "small" :style {:fontSize 12}}
+   [:> Row
+    [:> Col {:span 18}
+     [:div [:Text {:strong true} name]]
+     [:div [:Text {:strong true} type] "・" time]]
+    [:> Col {:span 6} extra]]])
+
 (defn cv []
   [:div
    (CenterTitle
@@ -48,4 +57,6 @@
     [:p.someclass
      "I have " [:strong "bold"]
      [:span {:style {:color "red"}} " and red"]
-     " text."])])
+     " text."])
+   (EducationCard (->> content :education first))])
+
