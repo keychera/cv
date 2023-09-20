@@ -1,9 +1,12 @@
 (ns old-cv
-  (:require ["antd" :refer [Avatar Card Col Row Typography]]
+  (:require ["antd" :refer [Avatar Card Col Row Tag Typography]]
             [reagent.core :refer [as-element]]))
 
 (def Text Typography.Text)
 (def Meta Card.Meta)
+
+(defn Link [{:keys [href children]}]
+  [:a {:href href :target "_blank" :rel "noopener noreferrer"} (or children href)])
 
 (def content
   {:name "Kevin Erdiza Yogatama"
@@ -23,7 +26,9 @@
      :items
      [{:type "project", :title "Opengl animation", :time "August - September 2020 ", :desc "Combining the interest in art and programming, Kevin started learning Opengl to understand what's going on behind the scene of graphical processing. So far, Kevin managed to make one animated piece that he is proud of.", :tools ["c++" "opengl" "glsl"]}
       {:type "project", :title "2D/3D art with Blender", :time "September 2020", :desc "Having the vision to build a programmable visual, Kevin pursued learning Blender. Kevin has finished several tutorials that managed to make impressive visuals with a minimal amount of effort.", :tools ["blender"]}]}
-    {:type "project", :title "React app CV", :subtitle "This CV itself", :desc ["Continuing the React-native classes, Kevin learned React to make this CV and published it on GitHub pages. This CV can also be accessed on:"], :time "September - October 2020", :tools ["react" "javascript"]}]
+    {:type "project", :title "React app CV", :subtitle "This CV itself",
+     :desc ["Continuing the React-native classes, Kevin learned React to make this CV and published it on GitHub pages. This CV can also be accessed on:"
+            (Link {:href "https://keychera.github.io/react-playground/cv"})], :time "September - October 2020", :tools ["react" "javascript"]}]
    :education
    [{:name "Institut Teknologi Bandung", :type "university", :time "2015 - 2020", :extra ""}
     {:name "SMANU MH Thamrin", :type "senior high school", :time "2012 - 2015"}],
@@ -38,9 +43,6 @@
     {:title "design tools", :items ["figma"]}
     {:title "game engine", :items ["godot" "unity"]}
     {:title "other", :items ["blender" "opengl" "glsl/shading language"]}]})
-
-(defn Link [{:keys [href children]}]
-  [:a {:href href :target "_blank" :rel "noopener noreferrer"} children])
 
 (defn CenterTitle [& children]
   [:div {:style {:textAlign "center" :verticalAlign "center" :paddingTop 6 :backgroundColor "white"}}
@@ -97,6 +99,50 @@
     (->> content :experience
          (map ExperienceCard))]))
 
+(def tool-color
+  {"react-native" "blue"
+   "react" "blue"
+   "expo" "cyan"
+   "javascript" "green"
+   "godot" "geekblue"
+   "c++" "gold"
+   "opengl" "gold"
+   "blender" "volcano"
+   "perl" "red"
+   "java" "orange"
+   "python" "purple"
+   "figma" "lime"})
+
+(defmulti ProjectCard :type)
+
+(defmethod ProjectCard "project"
+  [{:keys [title subtitle desc time tools]}]
+  [:> Card {:title title :size "small"
+            :extra (as-element [:> Text subtitle])}
+   [:> Row
+    [:> Col {:span 16}
+     [:div {:style {:paddingRight 10 :fontSize 12}}
+      [:> Text
+       (if (vector? desc) (list desc) desc)]]]
+    [:> Col {:span 8}
+     [:div {:style {:fontSize 12 :marginBottom 8}}
+      [:> Text {:strong true} time]]
+     [:div
+      (->> tools
+           (map (fn [tool]
+                  [:> Tag {:color (tool-color tool)
+                           :style {:marginBottom 4}} tool])))]]]])
+
+(defmethod ProjectCard "group"
+  [{:keys [title items]}]
+  [:> Card {:title title :size "small"}
+   (->> items
+        (map ProjectCard))])
+
+(defmethod ProjectCard :default
+  [{:keys [title]}]
+  [:> Card {:size "small"} (str "undefined type " title)])
+
 (defn cv []
   [:div
    (CenterTitle
@@ -107,5 +153,7 @@
      " text."])
    (Profile {:big-screen? false})
    (Educations)
-   (Experiences)])
+   (Experiences)
+   (ProjectCard (->> content :projects first))
+   (ProjectCard (->> content :projects second))])
 
