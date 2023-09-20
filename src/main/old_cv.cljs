@@ -62,7 +62,7 @@
    [:div time]
    [:div desc]])
 
-(defn Profile [{:keys [content big-screen?]}]
+(defn Profile [{:keys [big-screen?]}]
   [:> Card
    {:actions (->> content :contact
                   (mapv (fn [{:keys [name display link]}]
@@ -83,6 +83,20 @@
       [:h4 (:name content)]
       [:p {:style {:color "#00000073"}} (:about content)]])])
 
+(defn Educations []
+  (list
+   (CenterTitle "Education 📚")
+   [:> Card {:size "small"}
+    (->> content :education
+         (map EducationCard))]))
+
+(defn Experiences []
+  (list
+   (CenterTitle "Experience 🥼")
+   [:> Card {:size "small"}
+    (->> content :experience
+         (map ExperienceCard))]))
+
 (defn cv []
   [:div
    (CenterTitle
@@ -91,7 +105,7 @@
      "I have " [:strong "bold"]
      [:span {:style {:color "red"}} " and red"]
      " text."])
-   (Profile {:content content :big-screen? false})
-   (EducationCard (->> content :education first))
-   (ExperienceCard (->> content :experience first))])
+   (Profile {:big-screen? false})
+   (Educations)
+   (Experiences)])
 
