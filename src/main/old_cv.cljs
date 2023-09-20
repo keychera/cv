@@ -43,7 +43,12 @@
     {:title "versioning tools", :items ["git"]}
     {:title "design tools", :items ["figma"]}
     {:title "game engine", :items ["godot" "unity"]}
-    {:title "other", :items ["blender" "opengl" "glsl/shading language"]}]})
+    {:title "other", :items ["blender" "opengl" "glsl/shading language"]}]
+   :extra
+   [(list "Have decent skills and great interest in "
+          [:> Text {:strong true} "drawing"] " and " [:> Text {:strong true} "animation"])
+    (list "Can speak and write in " [:> Text {:strong true} "English"]
+          " and has been studying " [:> Text  {:strong true} "Japanese"] " since December 2018")]})
 
 (defn CenterTitle [& children]
   [:div {:style {:textAlign "center" :verticalAlign "center" :paddingTop 6 :backgroundColor "white"}}
@@ -159,7 +164,30 @@
          [:> Col {:span 12} (->> row-1 (map ProjectCard))]
          [:> Col {:span 12} (->> row-2 (map ProjectCard))]]]))))
 
+(defn SkillCard [{:keys [title items]}]
+  [:> Card {:size "small"}
+   [:> Text {:strong true} title] "・"
+   (->> items
+        (map (fn [item]
+               [:> Tag {:color (tool-color item)
+                        :style {:marginBottom 4}} item])))])
+
+(defn ExtraCard [value]
+  [:> Card {:size "small"} value])
+
+(defn Skills []
+  (list
+   (CenterTitle "Technical skills 🔧")
+   [:> Card {:size "small"}
+    (->> content :skills
+         (map SkillCard))]
+   (CenterTitle "Extra skills ➕")
+   [:> Card {:size "small"}
+    (->> content :extra
+         (map ExtraCard))]))
+
 (defn cv []
+  (set! (.. js/document -title) "keychera's 2019 CV")
   [:div
    (CenterTitle
     [:h3 "I am a CV"]
@@ -170,4 +198,5 @@
    (Profile {:big-screen? false})
    (Educations)
    (Experiences)
-   (Projects {:mobile? false})])
+   (Projects {:mobile? false})
+   (Skills)])
