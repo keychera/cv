@@ -28,7 +28,8 @@
       {:type "project", :title "2D/3D art with Blender", :time "September 2020", :desc "Having the vision to build a programmable visual, Kevin pursued learning Blender. Kevin has finished several tutorials that managed to make impressive visuals with a minimal amount of effort.", :tools ["blender"]}]}
     {:type "project", :title "React app CV", :subtitle "This CV itself",
      :desc ["Continuing the React-native classes, Kevin learned React to make this CV and published it on GitHub pages. This CV can also be accessed on:"
-            (Link {:href "https://keychera.github.io/react-playground/cv"})], :time "September - October 2020", :tools ["react" "javascript"]}]
+            (Link {:href "https://keychera.github.io/react-playground/cv"})]
+     :time "September - October 2020", :tools ["react" "javascript"]}]
    :education
    [{:name "Institut Teknologi Bandung", :type "university", :time "2015 - 2020", :extra ""}
     {:name "SMANU MH Thamrin", :type "senior high school", :time "2012 - 2015"}],
@@ -123,7 +124,9 @@
     [:> Col {:span 16}
      [:div {:style {:paddingRight 10 :fontSize 12}}
       [:> Text
-       (if (vector? desc) (list desc) desc)]]]
+       (if (vector? desc)
+         (->> desc (map (fn [d] [:div d])))
+         desc)]]]
     [:> Col {:span 8}
      [:div {:style {:fontSize 12 :marginBottom 8}}
       [:> Text {:strong true} time]]
@@ -141,7 +144,20 @@
 
 (defmethod ProjectCard :default
   [{:keys [title]}]
-  [:> Card {:size "small"} (str "undefined type " title)])
+  [:> Card {:size "small"} (str "undefined type for" title)])
+
+(defn Projects [{:keys [mobile?]}]
+  (list
+   (CenterTitle "Projects 💻")
+   (if mobile?
+     (->> content :projects
+          (map ProjectCard))
+     (let [row-1 (-> content :projects (subvec 0 3))
+           row-2 (-> content :projects (subvec 3))]
+       [:> Card {:size "small"}
+        [:> Row
+         [:> Col {:span 12} (->> row-1 (map ProjectCard))]
+         [:> Col {:span 12} (->> row-2 (map ProjectCard))]]]))))
 
 (defn cv []
   [:div
@@ -154,6 +170,4 @@
    (Profile {:big-screen? false})
    (Educations)
    (Experiences)
-   (ProjectCard (->> content :projects first))
-   (ProjectCard (->> content :projects second))])
-
+   (Projects {:mobile? false})])
