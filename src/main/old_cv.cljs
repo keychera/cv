@@ -13,6 +13,7 @@
 (def content
   {:name "Kevin Erdiza Yogatama"
    :about "An aspiring individual that has several experiences in web, mobile, and game development using various tools and platform"
+   :profile-url "/me.png"
    :contact
    [{:name "twitter", :display "@keychera", :link "https://twitter.com/keychera"}
     {:name "github", :display "keychera", :link "https://github.com/keychera"}
@@ -47,28 +48,27 @@
     {:title "game engine", :items ["godot" "unity"]}
     {:title "other", :items ["blender" "opengl" "glsl/shading language"]}]
    :extra
-   [(list "Have decent skills and great interest in "
-          [:> Text {:strong true} "drawing"] " and " [:> Text {:strong true} "animation"])
-    (list "Can speak and write in " [:> Text {:strong true} "English"]
-          " and has been studying " [:> Text  {:strong true} "Japanese"] " since December 2018")]})
+   [[:<> "Have decent skills and great interest in "
+     [:> Text {:strong true} "drawing"] " and " [:> Text {:strong true} "animation"]]
+    [:<> "Can speak and write in " [:> Text {:strong true} "English"]
+     " and has been studying " [:> Text  {:strong true} "Japanese"] " since December 2018"]]})
 
 (defn CenterTitle [& children]
   [:div {:style {:textAlign "center" :verticalAlign "center" :paddingTop 6 :backgroundColor "white"}}
    [:h4 {:style {:marginBottom 0 :paddingBottom 2}} children]])
 
-(defn EducationCard [{:keys [name type time extra]}]
-  [:> Card {:size "small" :style {:fontSize 12}}
+(defn EducationCard [idx {:keys [name type time extra]}]
+  [:> Card {:size "small" :style {:fontSize 12} :key (str idx)}
    [:> Row
     [:> Col {:span 18}
      [:div [:> Text {:strong true} name]]
      [:div [:> Text {:code true} type] "・" time]]
     [:> Col {:span 6} extra]]])
 
-(defn ExperienceCard [{:keys [title place time desc]}]
-  [:> Card {:size "small" :style {:fontSize 12}}
+(defn ExperienceCard [idx {:keys [title place time desc]}]
+  [:> Card {:size "small" :style {:fontSize 12} :key (str idx)}
    [:div
-    [:> Text {:strong true} title]
-    "・" [:> Text {:type "secondary"} place]]
+    [:> Text {:strong true} title] "・" [:> Text {:type "secondary"} place]]
    [:div time]
    [:div desc]])
 
@@ -85,7 +85,7 @@
      :cover (when-not big-screen?
               (as-element
                [:div {:style {:textAlign "center" :paddingTop 24}}
-                [:> Avatar {:src "" :size 128 :style {:display "inline-block"}}]]))}
+                [:> Avatar {:src (:profile-url content) :size 128 :style {:display "inline-block"}}]]))}
     (if big-screen?
       [:> Meta
        {:avatar (as-element [:> Avatar {:src "" :size 128}])
@@ -96,18 +96,18 @@
        [:p {:style {:color "#00000073"}} (:about content)]])]))
 
 (defn Educations []
-  (list
+  [:<>
    (CenterTitle "Education 📚")
    [:> Card {:size "small"}
     (->> content :education
-         (map EducationCard))]))
+         (map-indexed EducationCard))]])
 
 (defn Experiences []
-  (list
+  [:<>
    (CenterTitle "Experience 🥼")
    [:> Card {:size "small"}
     (->> content :experience
-         (map ExperienceCard))]))
+         (map-indexed ExperienceCard))]])
 
 (def tool-color
   {"react-native" "blue"
@@ -123,78 +123,77 @@
    "python" "purple"
    "figma" "lime"})
 
-(defmulti ProjectCard :type)
+(defmulti ProjectCard (fn [_ props] (:type props)))
 
 (defmethod ProjectCard "project"
-  [{:keys [title subtitle desc time tools]}]
-  [:> Card {:title title :size "small"
+  [idx {:keys [title subtitle desc time tools]}]
+  [:> Card {:title title :size "small" :key (str idx)
             :extra (as-element [:> Text subtitle])}
    [:> Row
     [:> Col {:span 16}
      [:div {:style {:paddingRight 10 :fontSize 12}}
       [:> Text
        (if (vector? desc)
-         (->> desc (map (fn [d] [:div d])))
+         (->> desc (map-indexed (fn [idx d] [:div {:key (str idx)} d])))
          desc)]]]
     [:> Col {:span 8}
      [:div {:style {:fontSize 12 :marginBottom 8}}
       [:> Text {:strong true} time]]
      [:div
       (->> tools
-           (map (fn [tool]
-                  [:> Tag {:color (tool-color tool)
-                           :style {:marginBottom 4}} tool])))]]]])
+           (map-indexed (fn [idx tool]
+                          [:> Tag {:color (tool-color tool) :key (str idx)
+                                   :style {:marginBottom 4}} tool])))]]]])
 
 (defmethod ProjectCard "group"
-  [{:keys [title items]}]
-  [:> Card {:title title :size "small"}
+  [idx {:keys [title items]}]
+  [:> Card {:title title :size "small" :key (str idx)}
    (->> items
-        (map ProjectCard))])
+        (map-indexed ProjectCard))])
 
 (defmethod ProjectCard :default
-  [{:keys [title]}]
-  [:> Card {:size "small"} (str "undefined type for" title)])
+  [idx {:keys [title]}]
+  [:> Card {:size "small" :key (str idx)} (str "undefined type for" title)])
 
 (defn Projects
   ([] (Projects {}))
   ([{:keys [mobile?]}]
-   (list
+   [:<>
     (CenterTitle "Projects 💻")
     (if mobile?
       (->> content :projects
-           (map ProjectCard))
+           (map-indexed ProjectCard))
       (let [row-1 (-> content :projects (subvec 0 3))
             row-2 (-> content :projects (subvec 3))]
         [:> Card {:size "small"}
          [:> Row
-          [:> Col {:span 12} (->> row-1 (map ProjectCard))]
-          [:> Col {:span 12} (->> row-2 (map ProjectCard))]]])))))
+          [:> Col {:span 12} (->> row-1 (map-indexed ProjectCard))]
+          [:> Col {:span 12} (->> row-2 (map-indexed ProjectCard))]]]))]))
 
-(defn SkillCard [{:keys [title items]}]
-  [:> Card {:size "small"}
+(defn SkillCard [idx {:keys [title items]}]
+  [:> Card {:size "small" :key (str idx)}
    [:> Text {:strong true} title] "・"
    (->> items
-        (map (fn [item]
-               [:> Tag {:color (tool-color item)
-                        :style {:marginBottom 4}} item])))])
+        (map-indexed (fn [idx item]
+                       [:> Tag {:color (tool-color item) :key (str idx)
+                                :style {:marginBottom 4}} item])))])
 
-(defn ExtraCard [value]
-  [:> Card {:size "small"} value])
+(defn ExtraCard [idx value]
+  [:> Card {:size "small" :key (str idx)} value])
 
 (defn Skills []
-  (list
+  [:<>
    (CenterTitle "Technical skills 🔧")
    [:> Card {:size "small"}
     (->> content :skills
-         (map SkillCard))]
+         (map-indexed SkillCard))]
    (CenterTitle "Extra skills ➕")
    [:> Card {:size "small"}
     (->> content :extra
-         (map ExtraCard))]))
+         (map-indexed ExtraCard))]])
 
 (defn cv []
   (set! (.. js/document -title) "keychera's 2019 CV")
-
   (let [big-screen? (useMediaQuery (clj->js {:minWidth 1500}))
         desktop?    (useMediaQuery (clj->js {:minWidth 1224}))
         tablet?     (useMediaQuery (clj->js {:minWidth 900 :maxWidth 1224}))
