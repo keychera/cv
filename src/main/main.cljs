@@ -8,7 +8,7 @@
   (gdom/getElement "app"))
 
 (defn mount [el]
-  (rdom/render [old-cv/cv] el))
+  (rdom/render [old-cv/root] el))
 
 (defn mount-app-element []
   (when-let [el (get-app-element)]

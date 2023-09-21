@@ -1,9 +1,11 @@
 (ns old-cv
-  (:require ["antd" :refer [Avatar Card Col Row Tag Typography]]
+  (:require ["antd" :refer [Avatar Card Col Row Tag Typography Tabs]]
+            ["react-responsive" :refer [useMediaQuery]]
             [reagent.core :refer [as-element]]))
 
 (def Text Typography.Text)
 (def Meta Card.Meta)
+(def TabPane Tabs.TabPane)
 
 (defn Link [{:keys [href children]}]
   [:a {:href href :target "_blank" :rel "noopener noreferrer"} (or children href)])
@@ -32,7 +34,7 @@
      :time "September - October 2020", :tools ["react" "javascript"]}]
    :education
    [{:name "Institut Teknologi Bandung", :type "university", :time "2015 - 2020", :extra ""}
-    {:name "SMANU MH Thamrin", :type "senior high school", :time "2012 - 2015"}],
+    {:name "SMANU MH Thamrin", :type "senior high school", :time "2012 - 2015" :extra "graduated with 3.41 GPA"}],
    :experience
    [{:title "Head of IT", :place "event: Pemilu HMIF", :time "September 2017 - December 2017", :desc "Kevin leads a team to build an attendance system for the event Pemilu HMIF 2018, a QA website, and an E-voting website for the voting process of Pemilu HMIF 2018."}
     {:title "Head of Gamedev community", :place "Inkubator IT HMIF", :time "Feb 2018 - Feb 2019", :desc "Kevin leads a community that dabbles in the art and tech of game development."}
@@ -70,26 +72,28 @@
    [:div time]
    [:div desc]])
 
-(defn Profile [{:keys [big-screen?]}]
-  [:> Card
-   {:actions (->> content :contact
-                  (mapv (fn [{:keys [name display link]}]
-                          (as-element
-                           [:> Text
-                            [:> Text {:strong true} name]
-                            (Link {:href link :children display})]))))
-    :cover (when-not big-screen?
-             (as-element
-              [:div {:style {:textAlign "center" :paddingTop 24}}
-               [:> Avatar {:src "" :size 128 :style {:display "inline-block"}}]]))}
-   (if big-screen?
-     [:> Meta
-      {:avatar (as-element [:> Avatar {:src "" :size 128}])
-       :title (:name content)
-       :description (:about content)}]
-     [:div
-      [:h4 (:name content)]
-      [:p {:style {:color "#00000073"}} (:about content)]])])
+(defn Profile
+  ([] (Profile {}))
+  ([{:keys [big-screen?]}]
+   [:> Card
+    {:actions (->> content :contact
+                   (mapv (fn [{:keys [name display link]}]
+                           (as-element
+                            [:> Text
+                             [:> Text {:strong true} name]
+                             (Link {:href link :children display})]))))
+     :cover (when-not big-screen?
+              (as-element
+               [:div {:style {:textAlign "center" :paddingTop 24}}
+                [:> Avatar {:src "" :size 128 :style {:display "inline-block"}}]]))}
+    (if big-screen?
+      [:> Meta
+       {:avatar (as-element [:> Avatar {:src "" :size 128}])
+        :title (:name content)
+        :description (:about content)}]
+      [:div
+       [:h4 (:name content)]
+       [:p {:style {:color "#00000073"}} (:about content)]])]))
 
 (defn Educations []
   (list
@@ -151,18 +155,20 @@
   [{:keys [title]}]
   [:> Card {:size "small"} (str "undefined type for" title)])
 
-(defn Projects [{:keys [mobile?]}]
-  (list
-   (CenterTitle "Projects 💻")
-   (if mobile?
-     (->> content :projects
-          (map ProjectCard))
-     (let [row-1 (-> content :projects (subvec 0 3))
-           row-2 (-> content :projects (subvec 3))]
-       [:> Card {:size "small"}
-        [:> Row
-         [:> Col {:span 12} (->> row-1 (map ProjectCard))]
-         [:> Col {:span 12} (->> row-2 (map ProjectCard))]]]))))
+(defn Projects
+  ([] (Projects {}))
+  ([{:keys [mobile?]}]
+   (list
+    (CenterTitle "Projects 💻")
+    (if mobile?
+      (->> content :projects
+           (map ProjectCard))
+      (let [row-1 (-> content :projects (subvec 0 3))
+            row-2 (-> content :projects (subvec 3))]
+        [:> Card {:size "small"}
+         [:> Row
+          [:> Col {:span 12} (->> row-1 (map ProjectCard))]
+          [:> Col {:span 12} (->> row-2 (map ProjectCard))]]])))))
 
 (defn SkillCard [{:keys [title items]}]
   [:> Card {:size "small"}
@@ -188,15 +194,41 @@
 
 (defn cv []
   (set! (.. js/document -title) "keychera's 2019 CV")
-  [:div
-   (CenterTitle
-    [:h3 "I am a CV"]
-    [:p.someclass
-     "I have " [:strong "bold"]
-     [:span {:style {:color "red"}} " and red"]
-     " text."])
-   (Profile {:big-screen? false})
-   (Educations)
-   (Experiences)
-   (Projects {:mobile? false})
-   (Skills)])
+
+  (let [big-screen? (useMediaQuery (clj->js {:minWidth 1500}))
+        desktop?    (useMediaQuery (clj->js {:minWidth 1224}))
+        tablet?     (useMediaQuery (clj->js {:minWidth 900 :maxWidth 1224}))
+        mobile?     (useMediaQuery (clj->js {:maxWidth 900}))]
+    [:div
+     (cond
+       desktop?
+       [:> Row {:align "center"}
+        [:> Col {:span 6}
+         (Profile {:big-screen? big-screen?})
+         (Educations)
+         (Experiences)]
+        [:> Col {:span 12} (Projects)]
+        [:> Col {:span 6} (Skills)]]
+
+       tablet?
+       [:> Row {:align "center"}
+        [:> Col {:span 6}
+         (Profile)
+         (Educations)
+         (Experiences)]
+        [:> Col {:span 18} (Projects) (Skills)]]
+
+       :else
+       [:<>
+        (Profile {:big-screen? big-screen?})
+        [:> Tabs {:defaultActiveKey "2" :type "card" :centered true}
+         [:> TabPane {:tab "📚" :key "1"}
+          (Educations)
+          (Experiences)]
+         [:> TabPane {:tab "💻" :key "2"}
+          (Projects {:mobile? mobile?})]
+         [:> TabPane {:tab "🔧" :key "3"}
+          (Skills)]]])]))
+
+(defn root []
+  [:f> cv])
