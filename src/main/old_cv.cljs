@@ -5,7 +5,6 @@
 
 (def Text Typography.Text)
 (def Meta Card.Meta)
-(def TabPane Tabs.TabPane)
 
 (defn Link [{:keys [href children]}]
   [:a {:href href :target "_blank" :rel "noopener noreferrer"} (or children href)])
@@ -220,14 +219,14 @@
        :else
        [:<>
         (Profile {:big-screen? big-screen?})
-        [:> Tabs {:defaultActiveKey "2" :type "card" :centered true}
-         [:> TabPane {:tab "📚" :key "1"}
-          (Educations)
-          (Experiences)]
-         [:> TabPane {:tab "💻" :key "2"}
-          (Projects {:mobile? mobile?})]
-         [:> TabPane {:tab "🔧" :key "3"}
-          (Skills)]]])]))
+        [:> Tabs
+         {:defaultActiveKey "2" :type "card" :centered true
+          :items [{:label "📚" :key "1"
+                   :children (as-element [:<> (Educations) (Experiences)])}
+                  {:label "💻" :key "2"
+                   :children (as-element (Projects {:mobile? mobile?}))}
+                  {:label "🔧" :key "3"
+                   :children (as-element (Skills))}]}]])]))
 
 (defn root []
   [:f> cv])
