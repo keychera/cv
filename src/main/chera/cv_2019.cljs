@@ -1,5 +1,7 @@
-(ns old-cv
-  (:require ["antd" :refer [Avatar Card Col Row Tag Typography Tabs]]
+(ns chera.cv-2019
+  (:require [goog.dom :as gdom]
+            [reagent.dom :as rdom]
+            ["antd" :refer [Avatar Card Col Row Tag Typography Tabs]]
             ["react-responsive" :refer [useMediaQuery]]
             [reagent.core :refer [as-element]]))
 
@@ -227,5 +229,13 @@
                   {:label "🔧" :key "3"
                    :children (as-element (Skills))}]}]])]))
 
-(defn root []
-  [:f> cv])
+;; the Edge
+(defn mount-app-element []
+  (when-let [el (gdom/getElement "app")]
+    (rdom/render [:f> cv] el)))
+
+(defn init []
+  (mount-app-element))
+
+(defn ^:dev/after-load on-reload []
+  (mount-app-element))

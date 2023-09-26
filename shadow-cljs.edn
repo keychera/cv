@@ -11,4 +11,10 @@
  :builds
  {:frontend
   {:target :browser
-   :modules {:main {:init-fn main/init}}}}}
+   :modules {:components {:entries [chera.components]}
+             :cv-2023    {:entries [chera.cv-2023]
+                          :depends-on #{:components}
+                          :init-fn chera.cv-2023/init}
+             :cv-2019    {:entries [chera.cv-2019]
+                          :depends-on #{:components}
+                          :init-fn chera.cv-2019/init}}}}}
