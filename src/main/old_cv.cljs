@@ -12,7 +12,7 @@
 (def content
   {:name "Kevin Erdiza Yogatama"
    :about "An aspiring individual that has several experiences in web, mobile, and game development using various tools and platform"
-   :profile-url "/me.png"
+   :profile-url "me_2019.png"
    :contact
    [{:name "twitter", :display "@keychera", :link "https://twitter.com/keychera"}
     {:name "github", :display "keychera", :link "https://github.com/keychera"}
