@@ -1,0 +1,17 @@
+{
+    "git.openRepositoryInParentFolders": "always",
+    "explorer.sortOrder": "type",
+    "html.format.wrapAttributes": "preserve-aligned",
+    "html.format.wrapLineLength": 0,
+    "files.exclude": {
+        "**/.portal": true,
+        "**/.lsp": true,
+        "**/.cpcache": true,
+        "**/.calva": true,
+        "*/**/.clj-kondo": true,
+    },
+    "[html]": {
+        "editor.suggest.insertMode": "replace",
+        "editor.tabSize": 2
+    },
+}
