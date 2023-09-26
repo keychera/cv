@@ -192,7 +192,6 @@
          (map-indexed ExtraCard))]])
 
 (defn cv []
-  (set! (.. js/document -title) "keychera's 2019 CV")
   (let [big-screen? (useMediaQuery (clj->js {:minWidth 1500}))
         desktop?    (useMediaQuery (clj->js {:minWidth 1224}))
         tablet?     (useMediaQuery (clj->js {:minWidth 900 :maxWidth 1224}))
