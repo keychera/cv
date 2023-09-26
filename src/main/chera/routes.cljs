@@ -13,7 +13,8 @@
       [:> Link {:to "/2019"} [:> Button "2019 CV"]]]]]])
 
 (defn routes []
-  [:> BrowserRouter
+  ;; hardcoded URL matching github page url/repo name
+  [:> BrowserRouter {:basename "/cv"}
    [:> Routes
     [:> Route {:path "/2019" :element (as-element (cv-2019/root))}]
     [:> Route {:path "/" :element (as-element root)}]]])
