@@ -1,4 +1,4 @@
-(ns old-cv
+(ns chera.cv-2019
   (:require ["antd" :refer [Avatar Card Col Row Tag Typography Tabs]]
             ["react-responsive" :refer [useMediaQuery]]
             [reagent.core :refer [as-element]]))

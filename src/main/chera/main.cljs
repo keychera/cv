@@ -1,5 +1,5 @@
-(ns main 
-  (:require [old-cv]
+(ns chera.main
+  (:require [chera.routes :as routes]
             [goog.dom :as gdom]
             [reagent.dom :as rdom]))
 
@@ -8,7 +8,8 @@
   (gdom/getElement "app"))
 
 (defn mount [el]
-  (rdom/render [old-cv/root] el))
+  (rdom/render [routes/routes] el))
+  
 
 (defn mount-app-element []
   (when-let [el (get-app-element)]

@@ -1,7 +1,7 @@
 # cv
 
 development
-```
+```sh
 npx shadow-cljs watch frontend
 ```
 
