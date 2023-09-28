@@ -1,5 +1,5 @@
 (ns chera.cv-2023
-  (:require ["antd" :refer [Avatar Card Col Space Row Tag Typography Tabs]]
+  (:require ["antd" :refer [Avatar Card Col List Space Row Tag Typography Tabs]]
             ["react-responsive" :refer [useMediaQuery]]
             [reagent.core :refer [as-element]]))
 
@@ -19,30 +19,50 @@ Within my job, I have been exploring backend solutions and implementing them to 
     {:name "github", :display "keychera", :link "https://github.com/keychera"}
     {:name "linkedin", :display "keychera", :link "https://www.linkedin.com/in/keychera/"}]
    :projects
-   [{:type "group", :title "React Native projects",
+   [{:type "group", :title "Virgo ・ an E-money company"
+     :extra "Oktober 2020 - September 2023"
      :items
-     [{:type "project", :title "Mock MyAnimeList client mobile app", :time "July - August 2020", :desc "Kevin joined a React-native training class and built a client app for the database about anime named MyAnimeList for its final task.", :tools ["react-native" "expo" "javascript"]}
-      {:type "project", :title "Mock QA platform mobile app", :time "August - September 2020", :desc "Kevin joined an advanced React-native training class, continuing the previous one. For its final assignment, Kevin built a mock QA platform inspired by Brainly and Stackoverflow.", :tools ["react-native" "javascript"]}]}
-    {:type "project", :title "Potions for Ruby", :subtitle "a game made with Godot engine", :desc "Kevin made a game intended for a game submission event held by a YouTuber named Jonas Tyroller. \"Potion for Ruby\" is a small little story game that involves some puzzles gameplay.", :time "May - June 2020", :tools ["godot" "gdscript"]}
-    {:type "project", :title "Savant", :subtitle "University's final year project", :desc "Savant is the name of a bug localization technique, which is the main focus of Kevin's final year project at his university. Kevin attempted to build a replica of Savant's implementation, which resulted in a multi-language system that runs several tools and frameworks in different languages to make Savant works.", :time "August 2019 - April 2020", :tools ["perl" "java" "shellscript" "python"]}
-    {:type "group", :title "Graphic Programming projects",
-     :items
-     [{:type "project", :title "Opengl animation", :time "August - September 2020 ", :desc "Combining the interest in art and programming, Kevin started learning Opengl to understand what's going on behind the scene of graphical processing. So far, Kevin managed to make one animated piece that he is proud of.", :tools ["c++" "opengl" "glsl"]}
-      {:type "project", :title "2D/3D art with Blender", :time "September 2020", :desc "Having the vision to build a programmable visual, Kevin pursued learning Blender. Kevin has finished several tutorials that managed to make impressive visuals with a minimal amount of effort.", :tools ["blender"]}]}
-    {:type "project", :title "React app CV", :subtitle "This CV itself",
-     :desc ["Continuing the React-native classes, Kevin learned React to make this CV and published it on GitHub pages. This CV can also be accessed on:"
-            (Link {:href "https://keychera.github.io/react-playground/cv"})]
-     :time "September - October 2020", :tools ["react" "javascript"]}]
+     [{:type "group2" :title "Test Automation Engineer"
+       :extra "April 2022 - September 2023"
+       :time "April 2022 - September 2023"
+       :items
+       [{:type "project", :title "Developed a pipeline/queue system to compile and execute kotlin codebase"
+         :desc
+         ["Custom pipeline/queue server to compile and execute kotlin codebase"
+          "Test report aggregator and small-scale internal helper tools and dashboard"
+          "Web development that focus on the backend side by lowering front-end cose leveraging HTMX and Bootstrap"
+          "Integration with several development tools such as Gitlab scheduling and Slack"]
+         :tools ["Clojure" "HTMX" "SQlite" "Bootstrap" "Kubernetes" "GCP" "Oauth2-proxy"]}
+        {:type "project", :title "Developed a custom testing framework for QA team"
+         :desc
+         ["Drive test script standardization, configurability, and readability"
+          "Deal with code distribution (library publishing via Gitlab registry)"
+          "Simplifying build system for test scripts (Maven pom.xml generator)"
+          "Build base framework that is reusable for multiple entities"
+          "Mentor and train other member to use and help contribute to this framework"]
+         :tools ["Kotlin" "Junit5" "Selenium" "Appium" "RestAssured" "GRPC/Protobuf" "Maven" "Gradle" "Clojure/Babashka" "Gitlab CI"]}]}
+      {:type "group2" :title "Junior Test Automation Engineer"
+       :extra "Oktober 2020  - April 2022"
+       :items
+       [{:type "project", :title "Introduced Kotlin usage for test scripting"
+         :desc ["Proposed otlin to write test scripts to the team"
+                "Orchestra code migration and train other members to use Kotlin"]
+         :tools ["Kotlin" "Gradle"]}
+        {:type "project", :title "Write code generators to help GRPC/Protobuf testing"
+         :desc ["Write a code generator based on the protobuf definition and the officialy generated Java code to simplify writing test scripts"]
+         :tools ["Java" "Kotlin" "GRPC/Protobuf"  "Gradle"]}
+        {:type "project", :title "Write wrapper library to standardize test scripts"
+         :desc ["Introduce abstraction that standardize test scripts"
+                "Deal with code distribution via Gitlab registry"]
+         :tools ["Java" "Selenium" "Appium" "RestAssured" "Gradle"]}
+        {:type "project", :title "Write load test scripts"
+         :desc ["Write scripts using gatling, write Dockerfiles, and help preparing load test environment"]
+         :tools ["Scala" "Docker" "Kuberneter" "GCP" "Gitlab CI"]}]}]}]
    :education
    [{:title "Bandung Institute of Technology"
      :subtitle "Bachelor of Computer Science"
      :type "university", :time "2015 - 2020"
-     :extra "graduated with 3.41 GPA"}],
-   :experience
-   [{:title "What"
-     :place "Where"
-     :time "When"
-     :desc "How"}]
+     :extra "graduated with 3.41 GPA"}]
    :skills
    [{:title "JVM Languages"
      :items ["Kotlin" "Clojure" "Java" "Scala"]}
@@ -55,7 +75,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
     {:title "Testing"
      :items ["Junit5" "Selenium" "Appium" "RestAssured"]}
     {:title "Frontend"
-     :items ["HTMX" "Tailwind" "Bootstrap" "React" "Reagent (ClojureScript wrapper of React)"]}
+     :items ["HTMX" "Tailwind" "Bootstrap" "React" "Reagent "]}
     {:title "Scritping"
      :items ["Bash" "Clojure/Babashka"]}
     {:title "Design tools", :items ["Figma" "Penpot"]}
@@ -67,9 +87,9 @@ Within my job, I have been exploring backend solutions and implementing them to 
    [[:<> "some "
      [:> Text {:strong true} "drawing"] " and " [:> Text {:strong true} "animation"]]]})
 
-(defn CenterTitle [& children]
+(defn CenterTitle [title]
   [:div {:style {:textAlign "center" :verticalAlign "center" :paddingTop 8 :paddingBottom 8 :backgroundColor "white"}}
-   [:h4 {:style {:marginBottom 0 :paddingBottom 2}} children]])
+   [:h4 {:style {:marginBottom 0 :paddingBottom 2}} title]])
 
 (defn EducationCard [idx {:keys [title subtitle type time extra]}]
   [:> Card {:size "small" :style {:fontSize 12} :key (str idx)}
@@ -103,7 +123,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
                 [:> Avatar {:src (:profile-url content) :size 128 :style {:display "inline-block"}}]]))}
     (if big-screen?
       [:> Meta
-       {:avatar (as-element [:> Avatar {:src "" :size 128}])
+       {:avatar (as-element [:> Avatar {:src (:profile-url content) :size 128}])
         :title (:name content)
         :description (:about content)}]
       [:div
@@ -141,16 +161,16 @@ Within my job, I have been exploring backend solutions and implementing them to 
 (defmulti ProjectCard (fn [_ props] (:type props)))
 
 (defmethod ProjectCard "project"
-  [idx {:keys [title subtitle desc time tools]}]
+  [idx {:keys [title extra desc time tools]}]
   [:> Card {:title title :size "small" :key (str idx)
-            :extra (as-element [:> Text subtitle])}
+            :extra (as-element [:> Text extra])}
    [:> Row
-    [:> Col {:span 16}
-     [:div {:style {:paddingRight 10 :fontSize 12}}
-      [:> Text
-       (if (vector? desc)
-         (->> desc (map-indexed (fn [idx d] [:div {:key (str idx)} d])))
-         desc)]]]
+    [:> Col {:span 15}
+     [:> Text
+      (if (vector? desc)
+        [:> List {:dataSource (->> desc (map #(as-element [:> List.Item %]))) :renderItem identity}]
+        desc)]]
+    [:> Col {:span 1}]
     [:> Col {:span 8}
      [:div {:style {:fontSize 12 :marginBottom 8}}
       [:> Text {:strong true} time]]
@@ -161,10 +181,20 @@ Within my job, I have been exploring backend solutions and implementing them to 
                                    :style {:marginBottom 4}} tool])))]]]])
 
 (defmethod ProjectCard "group"
-  [idx {:keys [title items]}]
-  [:> Card {:title title :size "small" :key (str idx)}
+  [idx {:keys [title extra items]}]
+  [:> Card {:title title :extra extra :size "small" :key (str idx)}
    (->> items
         (map-indexed ProjectCard))])
+
+(defmethod ProjectCard "group2"
+  [idx {:keys [title extra items]}]
+  [:> Card {:title title :extra extra :size "small" :key (str idx)}
+   (let [size (count items) half (Math/ceil (/ size 2))
+         row-1 (-> items (subvec 0 half))
+         row-2 (-> items (subvec half))]
+     [:> Row
+      [:> Col {:span 12} (->> row-1 (map-indexed ProjectCard))]
+      [:> Col {:span 12} (->> row-2 (map-indexed ProjectCard))]])])
 
 (defmethod ProjectCard :default
   [idx {:keys [title]}]
@@ -234,16 +264,12 @@ Within my job, I have been exploring backend solutions and implementing them to 
           (Profile {:big-screen? big-screen?})
           (Skills)]
          [:> Col {:span 18}
-          (CenterTitle "Projects 💻")
-          (let [row-1 (-> content :projects (subvec 0 3))
-                row-2 (-> content :projects (subvec 3))]
-            [:<>
-             [:> Row
-              [:> Col {:span 12} (->> row-1 (map-indexed ProjectCard))]
-              [:> Col {:span 12} (->> row-2 (map-indexed ProjectCard))]]
-             [:> Row
-              [:> Col {:span 12} (Language)]
-              [:> Col {:span 12} (Educations)]]])]]
+          (CenterTitle "Experience 💻")
+          [:<>
+           (->> (:projects content) (map-indexed ProjectCard))
+           [:> Row
+            [:> Col {:span 12} (Language)]
+            [:> Col {:span 12} (Educations)]]]]]
         [:> Row
          [:> Col {:span 6}]
          [:> Col {:span 18} (ExtraSkills)]]]
