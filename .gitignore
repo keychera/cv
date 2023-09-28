@@ -6,6 +6,7 @@
 
 node_modules/
 public/js
+public/cv/js
 
 /target
 /checkouts

@@ -14,7 +14,7 @@
   (println (str "[bb] " (fn-name act) " " (reduce #(str %1 " " %2) args)))
   (apply act args))
 
-(def build "public")
+(def build "public/cv")
 (def remote-url (-> (shell {:out :string} "git config --get remote.origin.url") :out str/trim-newline))
 
 (defn clean-build []

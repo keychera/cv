@@ -11,4 +11,5 @@
  :builds
  {:frontend
   {:target :browser
+   :output-dir "public/cv/js"
    :modules {:main {:init-fn chera.main/init}}}}}
