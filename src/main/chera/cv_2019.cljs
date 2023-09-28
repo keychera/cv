@@ -33,8 +33,8 @@
             (Link {:href "https://keychera.github.io/react-playground/cv"})]
      :time "September - October 2020", :tools ["react" "javascript"]}]
    :education
-   [{:name "Institut Teknologi Bandung", :type "university", :time "2015 - 2020", :extra ""}
-    {:name "SMANU MH Thamrin", :type "senior high school", :time "2012 - 2015" :extra "graduated with 3.41 GPA"}],
+   [{:name "Institut Teknologi Bandung", :type "university", :time "2015 - 2020", :extra "graduated with 3.41 GPA"}
+    {:name "SMANU MH Thamrin", :type "senior high school", :time "2012 - 2015" :extra ""}],
    :experience
    [{:title "Head of IT", :place "event: Pemilu HMIF", :time "September 2017 - December 2017", :desc "Kevin leads a team to build an attendance system for the event Pemilu HMIF 2018, a QA website, and an E-voting website for the voting process of Pemilu HMIF 2018."}
     {:title "Head of Gamedev community", :place "Inkubator IT HMIF", :time "Feb 2018 - Feb 2019", :desc "Kevin leads a community that dabbles in the art and tech of game development."}
