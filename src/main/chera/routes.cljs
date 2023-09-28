@@ -1,7 +1,8 @@
 (ns chera.routes
-  (:require ["antd" :refer [Button Card Row Col Space]]
+  (:require ["antd" :refer [Button Card Col Row Space]]
             ["react-router-dom" :refer [BrowserRouter Link Route Routes]]
             [chera.cv-2019 :as cv-2019]
+            [chera.cv-2023 :as cv-2023]
             [reagent.core :refer [as-element]]))
 
 (def root
@@ -16,5 +17,6 @@
   ;; hardcoded URL matching github page url/repo name
   [:> BrowserRouter {:basename "/cv"}
    [:> Routes
+    [:> Route {:path "/2023" :element (as-element (cv-2023/root))}]
     [:> Route {:path "/2019" :element (as-element (cv-2019/root))}]
     [:> Route {:path "/" :element (as-element root)}]]])
