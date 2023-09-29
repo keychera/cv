@@ -20,7 +20,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
     {:name "linkedin", :display "keychera", :link "https://www.linkedin.com/in/keychera/"}]
    :projects
    [{:title "Virgo"
-     :subtitle "A fintech company that has several product including E-money app, B2B payment-related services, and personal money management app"
+     :subtitle "A fintech company that has several product including E-money app, B2B payment-related services, and personal money management app."
      :extra "Oktober 2020 - September 2023"
      :items
      [{:title "Test Automation Engineer"
@@ -30,7 +30,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
        [{:type "project", :title "Developed a pipeline/queue system to compile and execute kotlin codebase"
          :desc
          ["Custom pipeline/queue server to compile and execute kotlin codebase."
-          "A test report aggregator, small-scale internal dashboard, and web helper tools"
+          "A test report aggregator, small-scale internal dashboard, and web helper tools."
           "Web development that focus on the backend side by lowering front-end development with HTMX and Bootstrap."
           "Integrated the server with several development tools such as Gitlab scheduling and Slack."]
          :tools ["Clojure" "HTMX" "SQLite" "Bootstrap" "Kubernetes" "GCP" "Oauth2-proxy"]}
@@ -46,14 +46,14 @@ Within my job, I have been exploring backend solutions and implementing them to 
        :extra "Oktober 2020  - April 2022"
        :items
        [{:type "project", :title "Introduced Kotlin usage for test scripting"
-         :desc ["Proposed Kotlin to write test scripts to the team"
+         :desc ["Proposed Kotlin to write test scripts to the team."
                 "Orchestrate code migration and train other members to use Kotlin."]
          :tools ["Kotlin" "Gradle"]}
         {:type "project", :title "Write code generators to help GRPC/Protobuf testing"
          :desc ["Wrote a code generator based on the protobuf definition and the officialy-generated Java code to simplify writing test scripts."]
          :tools ["Java" "Kotlin" "GRPC/Protobuf"  "Gradle"]}
         {:type "project", :title "Write wrapper library to standardize test scripts"
-         :desc ["Designed an abstraction that standardize test scripts and introduced them to the team"
+         :desc ["Designed an abstraction that standardize test scripts and introduced them to the team."
                 "Dealt with code distribution with maven-publishing and Gitlab registry."]
          :tools ["Java" "Selenium" "Appium" "RestAssured" "Gradle"]}
         {:type "project", :title "Write load test scripts"
