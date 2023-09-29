@@ -4,6 +4,7 @@
             [reagent.core :refer [as-element]]))
 
 (def Text Typography.Text)
+(def Title Typography.Title)
 (def Meta Card.Meta)
 
 (defn Link [{:keys [href children]}]
@@ -19,10 +20,11 @@ Within my job, I have been exploring backend solutions and implementing them to 
     {:name "github", :display "keychera", :link "https://github.com/keychera"}
     {:name "linkedin", :display "keychera", :link "https://www.linkedin.com/in/keychera/"}]
    :projects
-   [{:type "group", :title "Virgo ・ an E-money company"
+   [{:title "Virgo"
+     :subtitle "A fintech company that has several product including E-money app, B2B payment-related services, and personal money management app"
      :extra "Oktober 2020 - September 2023"
      :items
-     [{:type "group2" :title "Test Automation Engineer"
+     [{:title "Test Automation Engineer"
        :extra "April 2022 - September 2023"
        :time "April 2022 - September 2023"
        :items
@@ -41,7 +43,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
           "Build base framework that is reusable for multiple entities"
           "Mentor and train other member to use and help contribute to this framework"]
          :tools ["Kotlin" "Junit5" "Selenium" "Appium" "RestAssured" "GRPC/Protobuf" "Maven" "Gradle" "Clojure/Babashka" "Gitlab CI"]}]}
-      {:type "group2" :title "Junior Test Automation Engineer"
+      {:title "Junior Test Automation Engineer"
        :extra "Oktober 2020  - April 2022"
        :items
        [{:type "project", :title "Introduced Kotlin usage for test scripting"
@@ -159,9 +161,21 @@ Within my job, I have been exploring backend solutions and implementing them to 
    "python" "purple"
    "figma" "lime"})
 
-(defmulti ProjectCard (fn [_ props] (:type props)))
+(defn ProjectCard [idx {:keys [title desc tools]}]
+  [:> Card {:title title :size "small" :key (str idx)}
+   [:> Text
+    (if (vector? desc)
+      [:ul (->> desc (map (fn [i] [:li i])))]
+      desc)
+    [:div
+     (->> tools
+          (map-indexed (fn [idx tool]
+                         [:> Tag {:color (tool-color tool) :key (str idx)
+                                  :style {:marginBottom 4}} tool])))]]])
 
-(defmethod ProjectCard "project"
+(defmulti OldProjectCard (fn [_ props] (:type props)))
+
+(defmethod OldProjectCard "project"
   [idx {:keys [title extra desc time tools]}]
   [:> Card {:title title :size "small" :key (str idx)
             :extra (as-element [:> Text extra])}
@@ -181,29 +195,29 @@ Within my job, I have been exploring backend solutions and implementing them to 
                           [:> Tag {:color (tool-color tool) :key (str idx)
                                    :style {:marginBottom 4}} tool])))]]]])
 
-(defmethod ProjectCard "group"
-  [idx {:keys [title extra items]}]
-  [:> Card {:title title :extra extra :size "small" :key (str idx)}
-   (->> items
-        (map-indexed ProjectCard))])
+#_#_(defmethod ProjectCard "group"
+      [idx {:keys [title extra items]}]
+      [:> Card {:title title :extra extra :size "small" :key (str idx)}
+       (->> items
+            (map-indexed ProjectCard))])
 
-(defmethod ProjectCard "group2"
-  [idx {:keys [title extra items]}]
-  [:> Card {:title title :extra extra :size "small" :key (str idx)}
-   (let [size (count items) half (Math/ceil (/ size 2))
-         row-1 (-> items (subvec 0 half))
-         row-2 (-> items (subvec half))]
-     [:> Row
-      [:> Col {:span 12} (->> row-1 (map-indexed ProjectCard))]
-      [:> Col {:span 12} (->> row-2 (map-indexed ProjectCard))]])])
+  (defmethod ProjectCard "group2"
+    [idx {:keys [title extra items]}]
+    [:> Card {:title title :extra extra :size "small" :key (str idx)}
+     (let [size (count items) half (Math/ceil (/ size 2))
+           row-1 (-> items (subvec 0 half))
+           row-2 (-> items (subvec half))]
+       [:> Row
+        [:> Col {:span 12} (->> row-1 (map-indexed ProjectCard))]
+        [:> Col {:span 12} (->> row-2 (map-indexed ProjectCard))]])])
 
-(defmethod ProjectCard :default
+(defmethod OldProjectCard :default
   [idx {:keys [title]}]
   [:> Card {:size "small" :key (str idx)} (str "undefined type for" title)])
 
-(defn SkillCard [idx {:keys [title items]}]
+(defn SkillCard [idx {:keys [title items]} vertical?]
   [:> Card {:size "small" :key (str idx)}
-   [:> Space #_{:direction "vertical"}
+   [:> Space {:direction (if vertical? "vertical" "horizontal")}
     [:> Text {:strong true :autoSize true} title]
     [:div
      (->> items
@@ -214,12 +228,12 @@ Within my job, I have been exploring backend solutions and implementing them to 
 (defn ExtraCard [idx value]
   [:> Card {:size "small" :key (str idx)} value])
 
-(defn Skills []
+(defn Skills [vertical?]
   [:<>
    (CenterTitle "Technical skills 🔧")
    [:> Card {:size "small"}
     (->> content :skills
-         (map-indexed SkillCard))]])
+         (map-indexed (fn [idx skill] (SkillCard idx skill vertical?))))]])
 
 (defn Language []
   [:<>
@@ -235,6 +249,23 @@ Within my job, I have been exploring backend solutions and implementing them to 
     (->> content :extra
          (map-indexed ExtraCard))]])
 
+(defn Projects []
+  (->> (:projects content)
+       (map (fn [{job-items :items
+                  :keys [title subtitle extra]}]
+              [:div {:style {:padding "1rem"}}
+               [:div {:style {:display "flex" :align-items "center"}}
+                [:h3 title] [:div {:style {:margin-left "0.5rem"}} extra]]
+               [:div subtitle]
+               [:div
+                (->> job-items
+                     (map (fn [{proj-items :items
+                                :keys [title extra]}]
+                            [:<>
+                             [:> Space {:align "center"} ">" [:h4 title] [:span extra]]
+                             (->> proj-items
+                                  (map-indexed ProjectCard))])))]]))))
+
 (defn cv []
   (set! (.. js/document -title) "keychera's 2019 CV")
   (let [big-screen? (useMediaQuery (clj->js {:minWidth 1500}))
@@ -248,28 +279,23 @@ Within my job, I have been exploring backend solutions and implementing them to 
         [:> Row {:align "center"}
          [:> Col {:span 6}
           (Profile {:big-screen? big-screen?})
-          (Skills)]
+          (Educations)
+          (Skills false)
+          (Language)]
          [:> Col {:span 18}
           (CenterTitle "Experience 💻")
-          [:<>
-           (->> (:projects content) (map-indexed ProjectCard))
-           [:> Row
-            [:> Col {:span 12} (Language)]
-            [:> Col {:span 12} (Educations)]]]]]
-        #_[:> Row
-           [:> Col {:span 6}]
-           [:> Col {:span 18} (ExtraSkills)]]]
+          (Projects)]]]
 
        tablet?
        [:> Row {:align "center"}
         [:> Col {:span 8}
          (Profile)
          (Educations)
+         (Skills true)
          (Language)]
         [:> Col {:span 16}
          (CenterTitle "Experience 💻")
-         (->> (:projects content) (map-indexed ProjectCard))
-         (Skills)]]
+         (Projects)]]
 
        :else
        [:<>
@@ -279,9 +305,11 @@ Within my job, I have been exploring backend solutions and implementing them to 
           :items [{:label "📚" :key "1"
                    :children (as-element [:<> (Educations) (Language)])}
                   {:label "💻" :key "2"
-                   :children (as-element (->> (:projects content) (map-indexed ProjectCard)))}
+                   :children (as-element [:<>
+                                          (CenterTitle "Experiences 💻")
+                                          (Projects)])}
                   {:label "🔧" :key "3"
-                   :children (as-element (Skills))}]}]
+                   :children (as-element (Skills false))}]}]
         [:> Card]])]))
 
 (defn root []
