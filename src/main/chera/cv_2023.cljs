@@ -180,7 +180,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
 
 (defn SkillCard [idx {:keys [title items]} vertical?]
   [:> Card {:size "small" :key (str idx)}
-   [:> Space {:direction (if vertical? "vertical" "horizontal")}
+   [:> Space {:direction (if (and vertical? (> (count items) 3)) "vertical" "horizontal")}
     [:> Text {:strong true :autoSize true} title]
     [:div
      (->> items
