@@ -75,7 +75,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
      :items ["MySQL" "SQLite"]}
     {:title "Testing"
      :items ["Junit5" "Selenium" "Appium" "RestAssured"]}
-    {:title "Frontend"
+    {:title "Front-end"
      :items ["HTMX" "Tailwind" "Bootstrap" "React" "Reagent"]}
     {:title "Scritping"
      :items ["Bash" "Clojure/Babashka"]}
@@ -86,11 +86,15 @@ Within my job, I have been exploring backend solutions and implementing them to 
     [:<> [:> Text {:strong true} "Japanese"] " with JLPT N1 qualification and continue practicing weekly using Italki" [:br]
      (Link {:href "https://www.italki.com/user/18089807"})]]
    :extra
-   [[:<> "some "
-     [:> Text {:strong true} "drawing"] " and " [:> Text {:strong true} "animation"]]]})
+   [[:<> "Create an open source tool for Hot-reloading Clojure/Babahska + HTMX web projects." [:br]
+     "repo: " (Link {:href "https://github.com/keychera/panas.reload"})]
+    [:<> "Create a Japanese Number converter, language learning tool webapp." [:br]
+     "web: " (Link {:href "https://keychera.github.io/kazoeru/"})] 
+    [:<> "This very CV, originally a React project, converted to ClojureScript/Reagent." [:br]
+     "web: " (Link {:href "https://keychera.github.io/cv/2023"})]]})
 
 (defn CenterTitle [title]
-  [:div {:style {:textAlign "center" :verticalAlign "center" :paddingTop 8 :paddingBottom 8 :backgroundColor "white"}}
+  [:div {:style {:textAlign "center" :verticalAlign "center"  :paddingBottom 8 :backgroundColor "white"}}
    [:h4 {:style {:marginBottom 0 :paddingBottom 2}} title]])
 
 (defn EducationCard [idx {:keys [title subtitle type time extra]}]
@@ -201,15 +205,17 @@ Within my job, I have been exploring backend solutions and implementing them to 
     (->> content :language
          (map-indexed ExtraCard))]])
 
-(defn ExtraSkills []
+(defn SideProjects []
   [:<>
-   (CenterTitle "Extra skills ➕")
+   (CenterTitle "Side Projects ➕")
    [:> Card {:size "small"}
     (->> content :extra
          (map-indexed ExtraCard))]])
 
-(defn Projects []
-  (->> (:projects content)
+(defn Experiences []
+  [:<>
+   (CenterTitle "Experiences 💻")
+   (->> (:projects content)
        (map (fn [{job-items :items
                   :keys [title subtitle extra]}]
               [:div {:style {:padding "1rem"}}
@@ -223,7 +229,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
                             [:<>
                              [:> Space {:align "center"} "≫" [:h4 title] [:span extra]]
                              (->> proj-items
-                                  (map-indexed ProjectCard))])))]]))))
+                                  (map-indexed ProjectCard))])))]])))])
 
 (defn cv []
   (set! (.. js/document -title) "keychera's 2019 CV")
@@ -240,9 +246,9 @@ Within my job, I have been exploring backend solutions and implementing them to 
           (Educations)
           (Skills false)
           (Language)]
-         [:> Col {:span 18}
-          (CenterTitle "Experience 💻")
-          (Projects)]]]
+         [:> Col {:span 18} 
+          (Experiences)
+          (SideProjects)]]]
 
        tablet?
        [:> Row {:align "center"}
@@ -251,9 +257,9 @@ Within my job, I have been exploring backend solutions and implementing them to 
          (Educations)
          (Skills true)
          (Language)]
-        [:> Col {:span 16}
-         (CenterTitle "Experience 💻")
-         (Projects)]]
+        [:> Col {:span 16} 
+         (Experiences)
+         (SideProjects)]]
 
        :else ;; smaller than `tablet?`
        [:<>
@@ -261,11 +267,10 @@ Within my job, I have been exploring backend solutions and implementing them to 
         [:> Tabs
          {:defaultActiveKey "2" :type "card" :centered true
           :items [{:label "📚" :key "1"
-                   :children (as-element [:<> (Educations) (Language)])}
+                   :children (as-element [:<> (Educations) (Language) (SideProjects)])}
                   {:label "💻" :key "2"
-                   :children (as-element [:<>
-                                          (CenterTitle "Experiences 💻")
-                                          (Projects)])}
+                   :children (as-element [:<> 
+                                          (Experiences)])}
                   {:label "🔧" :key "3"
                    :children (as-element (Skills false))}]}]
         [:> Card]])]))
