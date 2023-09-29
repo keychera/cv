@@ -67,7 +67,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
    [{:title "JVM Languages"
      :items ["Kotlin" "Clojure" "Java" "Scala"]}
     {:title "Server"
-     :items ["http-kit" "Ring-Jetty (Clojure wrapper of Jetty)"]}
+     :items ["http-kit" "Ring-Jetty"]}
     {:title "Deployment"
      :items ["Docker" "Kuberneter" "GCP" "Gitlab CI"]}
     {:title "Databases"
@@ -81,8 +81,9 @@ Within my job, I have been exploring backend solutions and implementing them to 
     {:title "Design tools", :items ["Figma" "Penpot"]}
     {:title "Versioning tool", :items ["git"]}]
    :language
-   [[:<> "language " [:> Text {:strong true} "English"]]
-    [:<> "language " [:> Text {:strong true} "japanese"]]]
+   [[:<> "Comfortable using " [:> Text {:strong true} "English"] " daily"]
+    [:<> [:> Text {:strong true} "Japanese"] " with JLPT N1 qualification and continue practicing weekly using Italki" [:br]
+     (Link {:href "https://www.italki.com/user/18089807"})]]
    :extra
    [[:<> "some "
      [:> Text {:strong true} "drawing"] " and " [:> Text {:strong true} "animation"]]]})
@@ -200,21 +201,6 @@ Within my job, I have been exploring backend solutions and implementing them to 
   [idx {:keys [title]}]
   [:> Card {:size "small" :key (str idx)} (str "undefined type for" title)])
 
-(defn Projects
-  ([] (Projects {}))
-  ([{:keys [mobile?]}]
-   [:<>
-    (CenterTitle "Projects 💻")
-    (if mobile?
-      (->> content :projects
-           (map-indexed ProjectCard))
-      (let [row-1 (-> content :projects (subvec 0 3))
-            row-2 (-> content :projects (subvec 3))]
-        [:> Card {:size "small"}
-         [:> Row
-          [:> Col {:span 12} (->> row-1 (map-indexed ProjectCard))]
-          [:> Col {:span 12} (->> row-2 (map-indexed ProjectCard))]]]))]))
-
 (defn SkillCard [idx {:keys [title items]}]
   [:> Card {:size "small" :key (str idx)}
    [:> Space #_{:direction "vertical"}
@@ -255,7 +241,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
         desktop?    (useMediaQuery (clj->js {:minWidth 1224}))
         tablet?     (useMediaQuery (clj->js {:minWidth 900 :maxWidth 1224}))
         mobile?     (useMediaQuery (clj->js {:maxWidth 900}))]
-    [:div
+    [:<>
      (cond
        desktop?
        [:<>
@@ -270,17 +256,20 @@ Within my job, I have been exploring backend solutions and implementing them to 
            [:> Row
             [:> Col {:span 12} (Language)]
             [:> Col {:span 12} (Educations)]]]]]
-        [:> Row
-         [:> Col {:span 6}]
-         [:> Col {:span 18} (ExtraSkills)]]]
+        #_[:> Row
+           [:> Col {:span 6}]
+           [:> Col {:span 18} (ExtraSkills)]]]
 
        tablet?
        [:> Row {:align "center"}
-        [:> Col {:span 6}
+        [:> Col {:span 8}
          (Profile)
          (Educations)
-         (Experiences)]
-        [:> Col {:span 18} (Projects) (Skills)]]
+         (Language)]
+        [:> Col {:span 16}
+         (CenterTitle "Experience 💻")
+         (->> (:projects content) (map-indexed ProjectCard))
+         (Skills)]]
 
        :else
        [:<>
@@ -288,11 +277,12 @@ Within my job, I have been exploring backend solutions and implementing them to 
         [:> Tabs
          {:defaultActiveKey "2" :type "card" :centered true
           :items [{:label "📚" :key "1"
-                   :children (as-element [:<> (Educations) (Experiences)])}
+                   :children (as-element [:<> (Educations) (Language)])}
                   {:label "💻" :key "2"
-                   :children (as-element (Projects {:mobile? mobile?}))}
+                   :children (as-element (->> (:projects content) (map-indexed ProjectCard)))}
                   {:label "🔧" :key "3"
-                   :children (as-element (Skills))}]}]])]))
+                   :children (as-element (Skills))}]}]
+        [:> Card]])]))
 
 (defn root []
   [:f> cv])
