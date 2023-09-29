@@ -4,7 +4,6 @@
             [reagent.core :refer [as-element]]))
 
 (def Text Typography.Text)
-(def Title Typography.Title)
 (def Meta Card.Meta)
 
 (defn Link [{:keys [href children]}]
@@ -30,35 +29,35 @@ Within my job, I have been exploring backend solutions and implementing them to 
        :items
        [{:type "project", :title "Developed a pipeline/queue system to compile and execute kotlin codebase"
          :desc
-         ["Custom pipeline/queue server to compile and execute kotlin codebase"
-          "Test report aggregator and small-scale internal helper tools and dashboard"
-          "Web development that focus on the backend side by lowering front-end cose leveraging HTMX and Bootstrap"
-          "Integration with several development tools such as Gitlab scheduling and Slack"]
+         ["Custom pipeline/queue server to compile and execute kotlin codebase."
+          "Test report aggregator and small-scale internal dashboard and web helper tools"
+          "Web development that focus on the backend side by lowering front-end development cost by leveraging HTMX and Bootstrap."
+          "Integrated the server with several development tools such as Gitlab scheduling and Slack."]
          :tools ["Clojure" "HTMX" "SQlite" "Bootstrap" "Kubernetes" "GCP" "Oauth2-proxy"]}
         {:type "project", :title "Developed a custom testing framework for QA team"
          :desc
-         ["Drive test script standardization, configurability, and readability"
-          "Deal with code distribution (library publishing via Gitlab registry)"
-          "Simplifying build system for test scripts (Maven pom.xml generator)"
-          "Build base framework that is reusable for multiple entities"
-          "Mentor and train other member to use and help contribute to this framework"]
+         ["Drove test script standardization, configurability, and readability to the team."
+          "Dealt with code distribution (library publishing via Gitlab registry)."
+          "Simplified the build system for test scripts (Maven pom.xml generator)."
+          "Built a base framework that is reusable for multiple entities."
+          "Mentored and trained other member to use and help contribute to this framework"]
          :tools ["Kotlin" "Junit5" "Selenium" "Appium" "RestAssured" "GRPC/Protobuf" "Maven" "Gradle" "Clojure/Babashka" "Gitlab CI"]}]}
       {:title "Junior Test Automation Engineer"
        :extra "Oktober 2020  - April 2022"
        :items
        [{:type "project", :title "Introduced Kotlin usage for test scripting"
-         :desc ["Proposed otlin to write test scripts to the team"
-                "Orchestra code migration and train other members to use Kotlin"]
+         :desc ["Proposed Kotlin to write test scripts to the team"
+                "Orchestrate code migration and train other members to use Kotlin."]
          :tools ["Kotlin" "Gradle"]}
         {:type "project", :title "Write code generators to help GRPC/Protobuf testing"
-         :desc ["Write a code generator based on the protobuf definition and the officialy generated Java code to simplify writing test scripts"]
+         :desc ["Wrote a code generator based on the protobuf definition and the officialy-generated Java code to simplify writing test scripts."]
          :tools ["Java" "Kotlin" "GRPC/Protobuf"  "Gradle"]}
         {:type "project", :title "Write wrapper library to standardize test scripts"
-         :desc ["Introduce abstraction that standardize test scripts"
-                "Deal with code distribution via Gitlab registry"]
+         :desc ["Designed an abstraction that standardize test scripts and introduced them to the team"
+                "Dealt with code distribution with maven-publishing and Gitlab registry."]
          :tools ["Java" "Selenium" "Appium" "RestAssured" "Gradle"]}
         {:type "project", :title "Write load test scripts"
-         :desc ["Write scripts using gatling, write Dockerfiles, and help preparing load test environment"]
+         :desc ["Wrote scripts using Gatling, write Dockerfiles, and help preparing load test environment."]
          :tools ["Scala" "Docker" "Kuberneter" "GCP" "Gitlab CI"]}]}]}]
    :education
    [{:title "Bandung Institute of Technology"
@@ -173,48 +172,6 @@ Within my job, I have been exploring backend solutions and implementing them to 
                          [:> Tag {:color (tool-color tool) :key (str idx)
                                   :style {:marginBottom 4}} tool])))]]])
 
-(defmulti OldProjectCard (fn [_ props] (:type props)))
-
-(defmethod OldProjectCard "project"
-  [idx {:keys [title extra desc time tools]}]
-  [:> Card {:title title :size "small" :key (str idx)
-            :extra (as-element [:> Text extra])}
-   [:> Row
-    [:> Col {:span 15}
-     [:> Text
-      (if (vector? desc)
-        [:> List {:dataSource (->> desc (map #(as-element [:> List.Item %]))) :renderItem identity}]
-        desc)]]
-    [:> Col {:span 1}]
-    [:> Col {:span 8}
-     [:div {:style {:fontSize 12 :marginBottom 8}}
-      [:> Text {:strong true} time]]
-     [:div
-      (->> tools
-           (map-indexed (fn [idx tool]
-                          [:> Tag {:color (tool-color tool) :key (str idx)
-                                   :style {:marginBottom 4}} tool])))]]]])
-
-#_#_(defmethod ProjectCard "group"
-      [idx {:keys [title extra items]}]
-      [:> Card {:title title :extra extra :size "small" :key (str idx)}
-       (->> items
-            (map-indexed ProjectCard))])
-
-  (defmethod ProjectCard "group2"
-    [idx {:keys [title extra items]}]
-    [:> Card {:title title :extra extra :size "small" :key (str idx)}
-     (let [size (count items) half (Math/ceil (/ size 2))
-           row-1 (-> items (subvec 0 half))
-           row-2 (-> items (subvec half))]
-       [:> Row
-        [:> Col {:span 12} (->> row-1 (map-indexed ProjectCard))]
-        [:> Col {:span 12} (->> row-2 (map-indexed ProjectCard))]])])
-
-(defmethod OldProjectCard :default
-  [idx {:keys [title]}]
-  [:> Card {:size "small" :key (str idx)} (str "undefined type for" title)])
-
 (defn SkillCard [idx {:keys [title items]} vertical?]
   [:> Card {:size "small" :key (str idx)}
    [:> Space {:direction (if vertical? "vertical" "horizontal")}
@@ -262,7 +219,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
                      (map (fn [{proj-items :items
                                 :keys [title extra]}]
                             [:<>
-                             [:> Space {:align "center"} ">" [:h4 title] [:span extra]]
+                             [:> Space {:align "center"} "≫" [:h4 title] [:span extra]]
                              (->> proj-items
                                   (map-indexed ProjectCard))])))]]))))
 
@@ -270,8 +227,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
   (set! (.. js/document -title) "keychera's 2019 CV")
   (let [big-screen? (useMediaQuery (clj->js {:minWidth 1500}))
         desktop?    (useMediaQuery (clj->js {:minWidth 1224}))
-        tablet?     (useMediaQuery (clj->js {:minWidth 900 :maxWidth 1224}))
-        mobile?     (useMediaQuery (clj->js {:maxWidth 900}))]
+        tablet?     (useMediaQuery (clj->js {:minWidth 900 :maxWidth 1224}))]
     [:<>
      (cond
        desktop?
@@ -297,7 +253,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
          (CenterTitle "Experience 💻")
          (Projects)]]
 
-       :else
+       :else ;; smaller than `tablet?`
        [:<>
         (Profile {:big-screen? big-screen?})
         [:> Tabs
