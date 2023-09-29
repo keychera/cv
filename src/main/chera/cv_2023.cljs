@@ -1,5 +1,5 @@
 (ns chera.cv-2023
-  (:require ["antd" :refer [Avatar Card Col List Space Row Tag Typography Tabs]]
+  (:require ["antd" :refer [Avatar Card Col Space Row Tag Typography Tabs]]
             ["react-responsive" :refer [useMediaQuery]]
             [reagent.core :refer [as-element]]))
 
@@ -30,10 +30,10 @@ Within my job, I have been exploring backend solutions and implementing them to 
        [{:type "project", :title "Developed a pipeline/queue system to compile and execute kotlin codebase"
          :desc
          ["Custom pipeline/queue server to compile and execute kotlin codebase."
-          "Test report aggregator and small-scale internal dashboard and web helper tools"
-          "Web development that focus on the backend side by lowering front-end development cost by leveraging HTMX and Bootstrap."
+          "A test report aggregator, small-scale internal dashboard, and web helper tools"
+          "Web development that focus on the backend side by lowering front-end development with HTMX and Bootstrap."
           "Integrated the server with several development tools such as Gitlab scheduling and Slack."]
-         :tools ["Clojure" "HTMX" "SQlite" "Bootstrap" "Kubernetes" "GCP" "Oauth2-proxy"]}
+         :tools ["Clojure" "HTMX" "SQLite" "Bootstrap" "Kubernetes" "GCP" "Oauth2-proxy"]}
         {:type "project", :title "Developed a custom testing framework for QA team"
          :desc
          ["Drove test script standardization, configurability, and readability to the team."
@@ -58,7 +58,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
          :tools ["Java" "Selenium" "Appium" "RestAssured" "Gradle"]}
         {:type "project", :title "Write load test scripts"
          :desc ["Wrote scripts using Gatling, write Dockerfiles, and help preparing load test environment."]
-         :tools ["Scala" "Docker" "Kuberneter" "GCP" "Gitlab CI"]}]}]}]
+         :tools ["Scala" "Docker" "Kubernetes" "GCP" "Gitlab CI"]}]}]}]
    :education
    [{:title "Bandung Institute of Technology"
      :subtitle "Bachelor of Computer Science"
@@ -70,13 +70,13 @@ Within my job, I have been exploring backend solutions and implementing them to 
     {:title "Server"
      :items ["http-kit" "Ring-Jetty"]}
     {:title "Deployment"
-     :items ["Docker" "Kuberneter" "GCP" "Gitlab CI"]}
+     :items ["Docker" "Kubernetes" "GCP" "Gitlab CI"]}
     {:title "Databases"
      :items ["MySQL" "SQLite"]}
     {:title "Testing"
      :items ["Junit5" "Selenium" "Appium" "RestAssured"]}
     {:title "Frontend"
-     :items ["HTMX" "Tailwind" "Bootstrap" "React" "Reagent "]}
+     :items ["HTMX" "Tailwind" "Bootstrap" "React" "Reagent"]}
     {:title "Scritping"
      :items ["Bash" "Clojure/Babashka"]}
     {:title "Design tools", :items ["Figma" "Penpot"]}
@@ -101,13 +101,6 @@ Within my job, I have been exploring backend solutions and implementing them to 
      [:div [:> Text {:italic true} subtitle]]
      [:div [:> Text {:code true} type] "・" time]]
     [:> Col {:span 6} extra]]])
-
-(defn ExperienceCard [idx {:keys [title place time desc]}]
-  [:> Card {:size "small" :style {:fontSize 12} :key (str idx)}
-   [:div
-    [:> Text {:strong true} title] "・" [:> Text {:type "secondary"} place]]
-   [:div time]
-   [:div desc]])
 
 (defn Profile
   ([] (Profile {}))
@@ -139,26 +132,35 @@ Within my job, I have been exploring backend solutions and implementing them to 
     (->> content :education
          (map-indexed EducationCard))]])
 
-(defn Experiences []
-  [:<>
-   (CenterTitle "Experience 🥼")
-   [:> Card {:size "small"}
-    (->> content :experience
-         (map-indexed ExperienceCard))]])
-
 (def tool-color
-  {"react-native" "blue"
-   "react" "blue"
-   "expo" "cyan"
-   "javascript" "green"
-   "godot" "geekblue"
-   "c++" "gold"
-   "opengl" "gold"
-   "blender" "volcano"
-   "perl" "red"
-   "java" "orange"
-   "python" "purple"
-   "figma" "lime"})
+  {"Clojure" "green"
+   "Clojure/Babashka" "green"
+   "Reagent" "green"
+   "http-kit" "green"
+   "Ring-Jetty" "green"
+   "Penpot" "green"
+   "Java" "red"
+   "Scala" "red"
+   "Kotlin" "purple"
+   "Junit5" "cyan"
+   "HTMX" "cyan"
+   "SQLite" "cyan"
+   "MySQL" "cyan"
+   "Bootstrap" "cyan"
+   "Tailwind" "cyan"
+   "Selenium" "volcano"
+   "Appium" "volcano"
+   "RestAssured" "volcano"
+   "GRPC/Protobuf" "volcano"
+   "Gradle" "geekblue"
+   "Maven" "geekblue"
+   "Docker" "gold"
+   "Kubernetes" "gold"
+   "Gitlab CI" "gold"
+   "GCP" "gold"
+   "React" "blue"
+   "Oauth2-proxy" "lime"
+   "Figma" "lime"})
 
 (defn ProjectCard [idx {:keys [title desc tools]}]
   [:> Card {:title title :size "small" :key (str idx)}
