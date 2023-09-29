@@ -232,7 +232,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
                                   (map-indexed ProjectCard))])))]])))])
 
 (defn cv []
-  (set! (.. js/document -title) "keychera's 2019 CV")
+  (set! (.. js/document -title) "keychera's 2023 CV")
   (let [big-screen? (useMediaQuery (clj->js {:minWidth 1500}))
         desktop?    (useMediaQuery (clj->js {:minWidth 1224}))
         tablet?     (useMediaQuery (clj->js {:minWidth 900 :maxWidth 1224}))]
