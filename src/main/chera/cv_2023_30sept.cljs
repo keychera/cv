@@ -1,5 +1,5 @@
-(ns chera.cv-2023
-  (:require ["antd" :refer [Card Col Space Row Tag Typography Tabs]]
+(ns chera.cv-2023-30sept
+  (:require ["antd" :refer [Avatar Card Col Space Row Tag Typography Tabs]]
             ["react-responsive" :refer [useMediaQuery]]
             [reagent.core :refer [as-element]]))
 
@@ -115,10 +115,15 @@ Within my job, I have been exploring backend solutions and implementing them to 
                            (as-element
                             [:> Text
                              [:> Text {:strong true} name]
-                             (Link {:href link :children display})]))))}
+                             (Link {:href link :children display})]))))
+     :cover (when-not big-screen?
+              (as-element
+               [:div {:style {:textAlign "center" :paddingTop 24}}
+                [:> Avatar {:src (:profile-url content) :size 128 :style {:display "inline-block"}}]]))}
     (if big-screen?
       [:> Meta
-       {:title (:name content)
+       {:avatar (as-element [:> Avatar {:src (:profile-url content) :size 128}])
+        :title (:name content)
         :description (:about content)}]
       [:div
        [:h4 (:name content)]
