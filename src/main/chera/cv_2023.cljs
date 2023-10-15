@@ -4,7 +4,6 @@
             [reagent.core :refer [as-element]]))
 
 (def Text Typography.Text)
-(def Meta Card.Meta)
 
 (defn Link [{:keys [href children]}]
   [:a {:href href :target "_blank" :rel "noopener noreferrer"} (or children href)])
@@ -27,7 +26,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
        :extra "April 2022 - September 2023"
        :time "April 2022 - September 2023"
        :items
-       [{:type "project", :title "Developed a pipeline/queue system to compile and execute kotlin codebase"
+       [{:type "project", :title "I proposed and developed a pipeline/queue system to aid automated test execution"
          :desc
          ["Custom pipeline/queue server to compile and execute kotlin codebase."
           "A test report aggregator, small-scale internal dashboard, and web helper tools."
@@ -66,7 +65,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
      :extra "graduated with 3.41 GPA"}]
    :skills
    [{:title "JVM Languages"
-     :items ["Kotlin" "Clojure" "Java" "Scala"]}
+     :items ["Kotlin" "Clojure" "Java"]}
     {:title "Server"
      :items ["http-kit" "Ring-Jetty"]}
     {:title "Deployment"
@@ -77,14 +76,15 @@ Within my job, I have been exploring backend solutions and implementing them to 
      :items ["Junit5" "Selenium" "Appium" "RestAssured"]}
     {:title "Front-end"
      :items ["HTMX" "Tailwind" "Bootstrap" "React" "Reagent"]}
-    {:title "Scritping"
-     :items ["Bash" "Clojure/Babashka"]}
+    {:title "Scripting"
+     :items ["Clojure/Babashka" "Bash"]}
     {:title "Design tools", :items ["Figma" "Penpot"]}
     {:title "Versioning tool", :items ["git"]}]
    :language
-   [[:<> "Comfortable using " [:> Text {:strong true} "English"] " daily"]
-    [:<> [:> Text {:strong true} "Japanese"] " with JLPT N1 qualification and continue practicing weekly using Italki" [:br]
-     (Link {:href "https://www.italki.com/user/18089807"})]]
+   [[:<> "I am comfortable using " [:> Text {:strong true} "English"] " daily"]
+    [:<> [:> Text {:strong true} "Japanese"] " with JLPT N1 qualification and"
+     [:br] "I have been practicing weekly using Italki"
+     [:br] (Link {:href "https://www.italki.com/user/18089807"})]]
    :extra
    [[:<> "Create an open source tool for Hot-reloading Clojure/Babahska + HTMX web projects." [:br]
      "repo: " (Link {:href "https://github.com/keychera/panas.reload"})]
@@ -108,7 +108,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
 
 (defn Profile
   ([] (Profile {}))
-  ([{:keys [big-screen?]}]
+  ([{:keys []}]
    [:> Card
     {:actions (->> content :contact
                    (mapv (fn [{:keys [name display link]}]
@@ -116,13 +116,9 @@ Within my job, I have been exploring backend solutions and implementing them to 
                             [:> Text
                              [:> Text {:strong true} name]
                              (Link {:href link :children display})]))))}
-    (if big-screen?
-      [:> Meta
-       {:title (:name content)
-        :description (:about content)}]
-      [:div
-       [:h4 (:name content)]
-       [:p {:style {:color "#00000073"}} (:about content)]])]))
+    [:div
+     [:h3 (:name content)]
+     [:p {:style {:color "#00000073"}} (:about content)]]]))
 
 (defn Educations []
   [:<>
@@ -200,16 +196,16 @@ Within my job, I have been exploring backend solutions and implementing them to 
     (->> content :language
          (map-indexed ExtraCard))]])
 
-(defn SideProjects []
+(defn Projects []
   [:<>
-   (CenterTitle "Side Projects ➕")
+   (CenterTitle "Project Experience ➕")
    [:> Card {:size "small"}
     (->> content :extra
          (map-indexed ExtraCard))]])
 
 (defn Experiences []
   [:<>
-   (CenterTitle "Experiences 💻")
+   (CenterTitle "Professional Experiences 💻")
    (->> (:projects content)
        (map (fn [{job-items :items
                   :keys [title subtitle extra]}]
@@ -239,22 +235,22 @@ Within my job, I have been exploring backend solutions and implementing them to 
          [:> Col {:span 6}
           (Profile {:big-screen? big-screen?})
           (Educations)
-          (Skills false)
-          (Language)]
+          (Language)
+          (Skills false)]
          [:> Col {:span 18} 
           (Experiences)
-          (SideProjects)]]]
+          (Projects)]]]
 
        tablet?
        [:> Row {:align "center"}
         [:> Col {:span 8}
          (Profile)
          (Educations)
-         (Skills true)
-         (Language)]
+         (Language)
+         (Skills true)]
         [:> Col {:span 16} 
          (Experiences)
-         (SideProjects)]]
+         (Projects)]]
 
        :else ;; smaller than `tablet?`
        [:<>
@@ -262,7 +258,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
         [:> Tabs
          {:defaultActiveKey "2" :type "card" :centered true
           :items [{:label "📚" :key "1"
-                   :children (as-element [:<> (Educations) (Language) (SideProjects)])}
+                   :children (as-element [:<> (Educations) (Language) (Projects)])}
                   {:label "💻" :key "2"
                    :children (as-element [:<> 
                                           (Experiences)])}

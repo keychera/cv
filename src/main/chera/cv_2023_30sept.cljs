@@ -77,7 +77,7 @@ Within my job, I have been exploring backend solutions and implementing them to 
      :items ["Junit5" "Selenium" "Appium" "RestAssured"]}
     {:title "Front-end"
      :items ["HTMX" "Tailwind" "Bootstrap" "React" "Reagent"]}
-    {:title "Scritping"
+    {:title "Scripting"
      :items ["Bash" "Clojure/Babashka"]}
     {:title "Design tools", :items ["Figma" "Penpot"]}
     {:title "Versioning tool", :items ["git"]}]
